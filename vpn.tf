@@ -12,6 +12,7 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   authentication_options {
     type                       = "federated-authentication"
     saml_provider_arn          = data.aws_iam_saml_provider.sp.arn
+    self_service_saml_provider_arn = data.aws_iam_saml_provider.sp.arn
   }
 
   connection_log_options {
