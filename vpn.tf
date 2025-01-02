@@ -9,6 +9,8 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   session_timeout_hours = 24
   vpn_port              = 443
 
+  self_service_portal = "enabled"
+
   authentication_options {
     type                           = "federated-authentication"
     saml_provider_arn              = data.aws_iam_saml_provider.sp.arn
