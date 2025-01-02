@@ -12,3 +12,9 @@ terraform {
 provider "aws" {
   region = "ap-northeast-1"
 }
+
+# Find a certificate that is issued
+data "aws_acm_certificate" "issued" {
+  domain   = var.domain
+  statuses = ["ISSUED"]
+}
