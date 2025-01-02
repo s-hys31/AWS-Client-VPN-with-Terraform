@@ -11,6 +11,8 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
 
   self_service_portal = "enabled"
 
+  dns_servers = ["1.1.1.1", "1.0.0.1"]
+
   authentication_options {
     type                           = "federated-authentication"
     saml_provider_arn              = data.aws_iam_saml_provider.sp.arn
