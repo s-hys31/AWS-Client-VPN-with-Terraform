@@ -1,7 +1,7 @@
 resource "aws_ec2_client_vpn_endpoint" "main" {
   description            = "Main Client VPN Endpoint"
   server_certificate_arn = data.aws_acm_certificate.issued.arn
-  client_cidr_block      = "10.0.0.0/16"
+  client_cidr_block      = "10.10.0.0/22"
 
   vpc_id = aws_vpc.main.id
 
@@ -63,4 +63,6 @@ resource "aws_ec2_client_vpn_route" "vpn_to_private" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   destination_cidr_block = "0.0.0.0/0"
   target_vpc_subnet_id   = aws_subnet.private.id
+
+  depends_on = [aws_ec2_client_vpn_network_association.vpn_to_private]
 }
