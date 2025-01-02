@@ -43,7 +43,6 @@ resource "aws_route_table" "public" {
   }
 }
 
-// NAT Gateway
 resource "aws_eip" "nat" {
 
 }
