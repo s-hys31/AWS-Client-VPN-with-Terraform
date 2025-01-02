@@ -64,7 +64,7 @@ resource "aws_ec2_client_vpn_authorization_rule" "allow_all_users" {
 resource "aws_ec2_client_vpn_route" "vpn_to_private" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   destination_cidr_block = "0.0.0.0/0"
-  target_vpc_subnet_id   = aws_subnet.private.id
+  target_vpc_subnet_id   = aws_ec2_client_vpn_network_association.vpn_to_private.subnet_id
 
   depends_on = [aws_ec2_client_vpn_network_association.vpn_to_private]
 }
