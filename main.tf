@@ -19,7 +19,15 @@ provider "aws" {
   }
 }
 
-data "aws_acm_certificate" "issued" {
-  domain   = var.domain
+data "aws_acm_certificate" "server" {
+  domain   = var.server_certificate_domain
   statuses = ["ISSUED"]
+}
+
+data "aws_iam_saml_provider" "saml_provider" {
+  arn = var.saml_provider_arn
+}
+
+data "aws_iam_saml_provider" "self_service_saml_provider" {
+  arn = var.self_service_saml_provider_arn
 }
