@@ -13,7 +13,7 @@ variable "self_service_saml_provider_arn" {
   type        = string
 }
 
-variable "aws_eip_nat_ip" {
-  description = "The Elastic IP to associate with the NAT Gateway"
+variable "aws_eip_static_ip" {
+  description = "The static IP address for the NAT Gateway"
   type        = string
 }
