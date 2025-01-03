@@ -1,4 +1,3 @@
-# Terraform Configuration
 terraform {
   required_providers {
     aws = {
@@ -10,7 +9,6 @@ terraform {
   required_version = ">= 1.2.0"
 }
 
-# AWS Provider Configuration
 provider "aws" {
   region = "ap-northeast-1"
 
@@ -21,7 +19,6 @@ provider "aws" {
   }
 }
 
-# ACM Certificate Data Source
 data "aws_acm_certificate" "issued" {
   domain   = var.domain
   statuses = ["ISSUED"]
