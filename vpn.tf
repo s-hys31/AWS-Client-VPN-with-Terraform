@@ -1,17 +1,14 @@
+# Client VPN Endpoint
 resource "aws_ec2_client_vpn_endpoint" "main" {
   description            = "Main Client VPN Endpoint"
   server_certificate_arn = data.aws_acm_certificate.issued.arn
   client_cidr_block      = "10.10.0.0/22"
-
-  vpc_id = aws_vpc.main.id
-
-  split_tunnel          = false
-  session_timeout_hours = 24
-  vpn_port              = 443
-
-  self_service_portal = "enabled"
-
-  dns_servers = ["1.1.1.1", "1.0.0.1"]
+  vpc_id                 = aws_vpc.main.id
+  split_tunnel           = false
+  session_timeout_hours  = 24
+  vpn_port               = 443
+  self_service_portal    = "enabled"
+  dns_servers            = ["1.1.1.1", "1.0.0.1"]
 
   authentication_options {
     type                           = "federated-authentication"
@@ -26,6 +23,7 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   security_group_ids = [aws_security_group.vpn.id]
 }
 
+# SAML Providers
 data "aws_iam_saml_provider" "sp" {
   arn = var.saml_provider_arn
 }
@@ -34,6 +32,7 @@ data "aws_iam_saml_provider" "s3p" {
   arn = var.self_service_saml_provider_arn
 }
 
+# Security Group for VPN
 resource "aws_security_group" "vpn" {
   vpc_id = aws_vpc.main.id
 
@@ -52,17 +51,20 @@ resource "aws_security_group" "vpn" {
   }
 }
 
+# VPN Network Association
 resource "aws_ec2_client_vpn_network_association" "vpn_to_private" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   subnet_id              = aws_subnet.private.id
 }
 
+# VPN Authorization Rule
 resource "aws_ec2_client_vpn_authorization_rule" "allow_all_users" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   target_network_cidr    = "0.0.0.0/0"
   authorize_all_groups   = true
 }
 
+# VPN Route
 resource "aws_ec2_client_vpn_route" "vpn_to_private" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   destination_cidr_block = "0.0.0.0/0"
