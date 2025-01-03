@@ -1,5 +1,5 @@
-variable "domain" {
-  description = "The domain name to find a certificate"
+variable "server_certificate_domain" {
+  description = "The domain of the server certificate"
   type        = string
 }
 
