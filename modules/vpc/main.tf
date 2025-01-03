@@ -4,7 +4,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "${var.name_prefix} VPN VPC"
+    Name = "${var.prefix} VPN VPC"
   }
 }
 
@@ -13,7 +13,7 @@ resource "aws_subnet" "private" {
   cidr_block = "10.0.1.0/24"
 
   tags = {
-    Name = "${var.name_prefix} VPN Private Subnet"
+    Name = "${var.prefix} VPN Private Subnet"
   }
 }
 
@@ -22,7 +22,7 @@ resource "aws_subnet" "public" {
   cidr_block = "10.0.2.0/24"
 
   tags = {
-    Name = "${var.name_prefix} VPN Public Subnet"
+    Name = "${var.prefix} VPN Public Subnet"
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "${var.name_prefix} VPN IGW"
+    Name = "${var.prefix} VPN IGW"
   }
 }
 
@@ -43,7 +43,7 @@ resource "aws_route_table" "vpc_to_internet" {
   }
 
   tags = {
-    Name = "${var.name_prefix} VPN Public Route Table"
+    Name = "${var.prefix} VPN Public Route Table"
   }
 }
 
@@ -57,7 +57,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = aws_subnet.public.id
 
   tags = {
-    Name = "${var.name_prefix} VPN NAT Gateway"
+    Name = "${var.prefix} VPN NAT Gateway"
   }
 }
 
@@ -70,7 +70,7 @@ resource "aws_route_table" "private_to_nat" {
   }
 
   tags = {
-    Name = "${var.name_prefix} VPN Private Route Table"
+    Name = "${var.prefix} VPN Private Route Table"
   }
 }
 
@@ -94,5 +94,9 @@ resource "aws_security_group" "vpn" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = [aws_subnet.private.cidr_block]
+  }
+
+  tags = {
+    Name = "${var.prefix} VPN Security Group"
   }
 }
