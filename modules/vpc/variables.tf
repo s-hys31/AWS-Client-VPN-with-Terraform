@@ -1,5 +1,5 @@
-variable "name_prefix" {
-  description = "Prefix for the name of the resources that will be created"
+variable "prefix" {
+  description = "The prefix to apply to all resources"
   type        = string
 }
 
