@@ -33,7 +33,7 @@ data "aws_iam_saml_provider" "self_service_saml_provider" {
 }
 
 data "aws_eip" "nat" {
-  public_ip = var.aws_eip_nat_ip
+  public_ip = var.aws_eip_static_ip
 }
 
 module "vpc" {
