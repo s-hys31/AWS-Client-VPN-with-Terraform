@@ -32,7 +32,7 @@ data "aws_iam_saml_provider" "self_service_saml_provider" {
   arn = var.self_service_saml_provider_arn
 }
 
-data "aws_eip" "nat" {
+data "aws_eip" "static_ip" {
   public_ip = var.aws_eip_static_ip
 }
 
@@ -40,7 +40,7 @@ module "vpc" {
   source = "./modules/vpc"
 
   prefix         = "VPN"
-  aws_eip_nat_id = data.aws_eip.nat.id
+  aws_eip_nat_id = data.aws_eip.static_ip.id
 }
 
 module "vpn" {
