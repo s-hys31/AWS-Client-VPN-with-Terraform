@@ -31,3 +31,26 @@ data "aws_iam_saml_provider" "saml_provider" {
 data "aws_iam_saml_provider" "self_service_saml_provider" {
   arn = var.self_service_saml_provider_arn
 }
+
+data "aws_eip" "nat" {
+  public_ip = var.aws_eip_nat_ip
+}
+
+module "vpc" {
+  source = "./modules/vpc"
+
+  prefix         = "VPN"
+  aws_eip_nat_id = data.aws_eip.nat.id
+}
+
+module "vpn" {
+  source = "./modules/vpn"
+
+  prefix                         = "VPN"
+  server_certificate_arn         = data.aws_acm_certificate.server.arn
+  vpc_id                         = module.vpc.vpc_id
+  saml_provider_arn              = data.aws_iam_saml_provider.saml_provider.arn
+  self_service_saml_provider_arn = data.aws_iam_saml_provider.self_service_saml_provider.arn
+  security_group_id              = module.vpc.security_group_id
+  subnet_id                      = module.vpc.subnet_id
+}
