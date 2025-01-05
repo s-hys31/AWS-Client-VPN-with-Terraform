@@ -10,8 +10,8 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
 
   authentication_options {
     type                           = "federated-authentication"
-    saml_provider_arn              = var.saml_provider_arn
-    self_service_saml_provider_arn = var.self_service_saml_provider_arn
+    saml_provider_arn              = aws_iam_saml_provider.main.arn
+    self_service_saml_provider_arn = aws_iam_saml_provider.self_service_portal.arn
   }
 
   connection_log_options {
@@ -26,10 +26,51 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   }
 }
 
+resource "aws_iam_saml_provider" "main" {
+  name                   = "${random_id.main.hex}-saml-provider"
+  saml_metadata_document = file("${path.root}/saml-metadata.xml")
+
+  tags = {
+    Name = "${var.prefix} SAML Provider"
+  }
+}
+
+resource "aws_iam_saml_provider" "self_service_portal" {
+  name                   = "${random_id.main.hex}-self-service-portal-saml-provider"
+  saml_metadata_document = file("${path.root}/self-service-portal-saml-metadata.xml")
+
+  tags = {
+    Name = "${var.prefix} Self Service Portal SAML Provider"
+  }
+}
+
 resource "aws_cloudwatch_log_group" "vpn" {
   name              = "/aws/ec2/client-vpn-connections-${random_id.main.hex}"
   retention_in_days = 90
 }
+
+resource "aws_security_group" "vpn" {
+  vpc_id = var.vpc_id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.private_subnet_cidr_block]
+  }
+
+  tags = {
+    Name = "${var.prefix} VPN Security Group"
+  }
+}
+
 
 resource "aws_ec2_client_vpn_network_association" "vpn_to_private" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
