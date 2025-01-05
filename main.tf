@@ -46,11 +46,10 @@ module "vpc" {
 module "vpn" {
   source = "./modules/vpn"
 
-  prefix                         = "VPN"
-  server_certificate_arn         = data.aws_acm_certificate.server.arn
-  vpc_id                         = module.vpc.vpc_id
-  saml_provider_arn              = data.aws_iam_saml_provider.saml_provider.arn
-  self_service_saml_provider_arn = data.aws_iam_saml_provider.self_service_saml_provider.arn
-  security_group_id              = module.vpc.security_group_id
-  subnet_id                      = module.vpc.subnet_id
+  private_subnet_cidr_block = module.vpc.private_subnet_cidr_block
+  prefix                    = "VPN"
+  server_certificate_arn    = data.aws_acm_certificate.server.arn
+  vpc_id                    = module.vpc.vpc_id
+  security_group_id         = module.vpc.security_group_id
+  subnet_id                 = module.vpc.subnet_id
 }
