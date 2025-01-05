@@ -78,25 +78,3 @@ resource "aws_route_table_association" "private_to_nat" {
   subnet_id      = aws_subnet.private.id
   route_table_id = aws_route_table.private_to_nat.id
 }
-
-resource "aws_security_group" "vpn" {
-  vpc_id = aws_vpc.main.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [aws_subnet.private.cidr_block]
-  }
-
-  tags = {
-    Name = "${var.prefix} VPN Security Group"
-  }
-}
