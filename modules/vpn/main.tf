@@ -19,7 +19,7 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
     cloudwatch_log_group = aws_cloudwatch_log_group.vpn.name
   }
 
-  security_group_ids = [var.security_group_id]
+  security_group_ids = [aws_security_group.vpn.id]
 
   tags = {
     Name = "${var.prefix} VPN Endpoint"
