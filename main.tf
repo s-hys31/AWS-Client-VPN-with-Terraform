@@ -38,10 +38,9 @@ module "vpc" {
 module "vpn" {
   source = "./modules/vpn"
 
-  private_subnet_cidr_block = module.vpc.private_subnet_cidr_block
+  private_subnet_cidr_block = module.vpc.private_subnet_cidr_blocks
   prefix                    = "VPN"
   server_certificate_arn    = data.aws_acm_certificate.server.arn
   vpc_id                    = module.vpc.vpc_id
-  security_group_id         = module.vpc.security_group_id
   subnet_id                 = module.vpc.subnet_id
 }
