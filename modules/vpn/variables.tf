@@ -19,11 +19,6 @@ variable "dns_servers" {
   default     = ["1.1.1.1", "1.0.0.1"]
 }
 
-variable "security_group_id" {
-  description = "The ID of the security group"
-  type        = string
-}
-
 variable "private_subnet_cidr_block" {
   description = "The CIDR block of the private subnet"
   type        = string
