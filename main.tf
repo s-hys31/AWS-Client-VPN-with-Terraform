@@ -24,14 +24,6 @@ data "aws_acm_certificate" "server" {
   statuses = ["ISSUED"]
 }
 
-data "aws_iam_saml_provider" "saml_provider" {
-  arn = var.saml_provider_arn
-}
-
-data "aws_iam_saml_provider" "self_service_saml_provider" {
-  arn = var.self_service_saml_provider_arn
-}
-
 data "aws_eip" "static_ip" {
   public_ip = var.aws_eip_static_ip
 }
